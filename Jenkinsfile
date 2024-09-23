@@ -1,13 +1,13 @@
 pipeline {
     agent any
     stages {
-        stage('Clone') {
-            steps {
-                sh '''
-                    git clone https://github.com/NarayanadasuRakesh/clinic-website-template.git
-                '''
-            }
-        }
+        // stage('Clone') {
+        //     steps {
+        //         sh '''
+        //             git clone https://github.com/NarayanadasuRakesh/clinic-website-template.git
+        //         '''
+        //     }
+        // }
         stage('Checkout') {
             steps {
                 sh '''
