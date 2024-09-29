@@ -46,8 +46,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    cd clinic-website-template
-                    sudo cp -r . /usr/share/nginx/html/
+                    sudo cp -r . /var/www/html/
                 '''
             }
         }
