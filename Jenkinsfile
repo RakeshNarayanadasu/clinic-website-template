@@ -12,8 +12,8 @@ pipeline {
             steps {
                 sh '''
                     ls -la
-                    cd clinic-website-template
-                    ls -la
+                    // cd clinic-website-template
+                    // ls -la
                 '''
             }
         }
