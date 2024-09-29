@@ -39,7 +39,7 @@ pipeline {
         stage('Env Setup') {
             steps {
                 sh '''
-                    sudo rm -rf /usr/share/nginx/html/*
+                    sudo rm -rf /var/www/html/*
                 '''
             }
         }
