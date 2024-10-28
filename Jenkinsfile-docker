@@ -25,6 +25,7 @@ pipeline {
                     
                     // Define the image tag using the commit ID
                     def imageTag = "${IMAGE_NAME}:${commitId}" 
+                    echo "Image Name: ${imageTag}"
 
                     sh '''                    
 
