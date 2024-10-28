@@ -1,0 +1,72 @@
+pipeline {
+    agent any
+
+    environment {
+        packageVersion = ''
+    }
+
+    stages {
+
+        stage('Get version') {
+            steps {
+                script {
+                    def packageJson = readJSON file: 'package.json'
+                    packageVersion = packageJson.version
+                    echo "Application version: $packageVersion"
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    sh '''
+                        
+                        # Kill any process using port 2000
+                        PID=$(sudo lsof -t -i:2000) || true
+                        if [ -n "$PID" ]; then
+                            sudo kill -9 $PID || true
+                        else
+                            echo "port 2000 not in use"
+                        fi
+
+                        #Stop, remove, and remove Docker image for existing container
+                        sudo docker stop clinic:${packageVersion} || true
+
+                        sudo docker rm clinic:${packageVersion} || true
+
+                        sudo docker rmi clinic:${packageVersion} || true
+
+                        #Build Docker image
+                        sudo docker build -t clinic:${packageVersion} .
+                        
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    #Run Docker container in detached mode, mapping port 2000
+                    sudo docker run -d -p 2000:80 --name clinic:${packageVersion} clinic:${packageVersion}
+                '''
+            }
+        }
+    }
+    post {
+        always {
+            echo "Deleting directory"
+            deleteDir()
+        }
+        failure {
+            echo "Failure at Build stage"
+            echo "Send email to Dev Team and Infra Team"
+            echo "Failure at Test stage"
+            echo "Send email to Dev, Test and Infra Team" 
+        }           
+        success {
+            echo "Send email to Infra Team"
+        }
+    }    
+}
