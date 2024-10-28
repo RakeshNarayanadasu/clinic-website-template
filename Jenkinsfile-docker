@@ -7,16 +7,6 @@ pipeline {
 
     stages {
 
-        // stage('Get version') {
-        //     steps {
-        //         script {
-        //             def packageJson = readJSON file: 'package.json'
-        //             packageVersion = packageJson.version
-        //             echo "Application version: $packageVersion"
-        //         }
-        //     }
-        // }
-
         stage('Build') {
             steps {
                 script {
@@ -29,11 +19,14 @@ pipeline {
                         else
                             echo "port 2000 not in use"
                         fi
+                    '''
 
-                        def commitId = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-                        
-                        // Define the image tag using the commit ID
-                        def imageTag = "${IMAGE_NAME}:${commitId}"                     
+                    def commitId = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    
+                    // Define the image tag using the commit ID
+                    def imageTag = "${IMAGE_NAME}:${commitId}" 
+
+                    sh '''                    
 
                         #Stop, remove, and remove Docker image for existing container
                         sudo docker stop ${imageTag} || true
