@@ -30,7 +30,7 @@ pipeline {
                     sh '''                    
 
                         #Stop, remove, and remove Docker image for existing container
-                        sudo docker stop "${imageTag}" || true
+                        sudo docker stop clinic:${commitId} || true
 
                         sudo docker rm "${imageTag}" || true
 
