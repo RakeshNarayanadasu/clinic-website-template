@@ -1,7 +1,25 @@
 pipeline {
     agent any
-
+    environment {
+        PORT = '4005'
+        REACT_APP_API_URL = 'http://test.in:2000'
+        REACT_APP_REDIRECT_URI = 'http://test.in:2000/oauth2/redirect'
+    }
     stages {
+
+        stage('Env config') {
+            steps {
+                script {
+                    sh '''
+                        touch .env
+                        echo "PORT:${PORT}" > .env
+                        echo "REACT_APP_API_URL = '${REACT_APP_API_URL}'" >> .env
+                        echo "REACT_APP_REDIRECT_URI = '${REACT_APP_REDIRECT_URI}'" >> .env
+                        ls -la
+                    '''
+                }
+            }
+        }        
 
         stage('Build') {
             steps {
